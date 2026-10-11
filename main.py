@@ -103,7 +103,7 @@ def main():
                     "name": project_name,
                     "id": None,
                     "slug": None,
-                    "versions": None,
+                    "game_versions": None,
                     "status": "not found",
                 }
             )
@@ -119,7 +119,7 @@ def main():
                         "name": project_name,
                         "id": None,
                         "slug": None,
-                        "versions": None,
+                        "game_versions": None,
                         "status": "not found",
                     }
                 )
@@ -132,7 +132,8 @@ def main():
                 "name": project["title"],
                 "id": project["id"],
                 "slug": project["slug"],
-                "version": get_highest_version(project["game_versions"]),
+                "versions": project["game_versions"],
+                "latest_version": get_highest_version(project["game_versions"]),
                 "status": status
             }
         )
@@ -143,15 +144,15 @@ def main():
             case "not found":
                 message = colored(f"✗ {project['name']}: project not found", RED)
             case "found":
-                if project["version"] == chosen_version:
-                    message = colored(f"✔ {project['name']} ({project['version']}): is updated", GREEN)
+                if chosen_version in project["versions"]:
+                    message = colored(f"✔ {project['name']} ({project['latest_version']}): is updated", GREEN)
                 else:
-                    message = colored(f"✗ {project['name']} ({chosen_version}): latest version {project['version']}", YELLOW)
+                    message = colored(f"✗ {project['name']} ({chosen_version}): latest version {project['latest_version']}", YELLOW)
             case "searched":
-                if project["version"] == chosen_version:
-                    message = colored(f"✔ {project['name']} ({project['version']}): is updated - searched", GREEN)
+                if chosen_version in project["versions"]:
+                    message = colored(f"✔ {project['name']} ({project['latest_version']}): is updated - searched", GREEN)
                 else:
-                    message = colored(f"✗ {project['name']} ({chosen_version}): latest version {project['version']} - searched", YELLOW)
+                    message = colored(f"✗ {project['name']} ({chosen_version}): latest version {project['latest_version']} - searched", YELLOW)
 
         print(message)
         
